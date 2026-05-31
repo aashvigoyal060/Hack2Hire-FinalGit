@@ -1,0 +1,10 @@
+{
+  "name": "@hack2hire/shared",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./schema.ts",
+  "exports": {
+    "./schema": "./schema.ts",
+    "./routes": "./routes.ts"
+  }
+}
