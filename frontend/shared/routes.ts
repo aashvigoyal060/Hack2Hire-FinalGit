@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   insertInterviewSchema,
   interviewSchema,
+  messageAnalysisSchema,
   messageSchema,
 } from "./types";
 
@@ -57,7 +58,7 @@ export const api = {
       responses: {
         200: z.object({
           message: messageSchema,
-          analysis: messageSchema.optional(),
+          analysis: messageAnalysisSchema.optional(),
           isComplete: z.boolean().optional(),
         }),
         404: errorSchemas.notFound,

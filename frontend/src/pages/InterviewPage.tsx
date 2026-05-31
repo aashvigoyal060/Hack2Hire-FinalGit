@@ -131,7 +131,12 @@ export default function InterviewPage() {
             finishAndReport();
           }
         },
-        onError: () => toast({ variant: "destructive", title: "Failed to send message" }),
+        onError: (err) =>
+          toast({
+            variant: "destructive",
+            title: "Failed to send message",
+            description: err instanceof Error ? err.message : undefined,
+          }),
       },
     );
   };

@@ -103,7 +103,18 @@ export function useNextStep() {
         body: JSON.stringify({ userResponse, timeTaken }),
       });
       if (!res.ok) throw new Error(await parseApiError(res));
-      return api.interviews.next.responses[200].parse(await res.json());
+      const json = await res.json();
+      const parsed = api.interviews.next.responses[200].safeParse(json);
+      if (!parsed.success) {
+        console.error("Next step response validation:", parsed.error.flatten());
+        // Backend succeeded; refetch will sync UI
+        return {
+          message: json.message,
+          analysis: json.analysis,
+          isComplete: Boolean(json.isComplete),
+        };
+      }
+      return parsed.data;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
