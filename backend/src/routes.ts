@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage.js";
+import { registerFeatureRoutes } from "./featureRoutes.js";
 import { api } from "../shared/routes.js";
 import { z } from "zod";
 import OpenAI from "openai";
@@ -163,6 +164,8 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express,
 ): Promise<Server> {
+  registerFeatureRoutes(app);
+
   app.get(api.interviews.list.path, async (_req, res) => {
     try {
       const items = await storage.listInterviews();

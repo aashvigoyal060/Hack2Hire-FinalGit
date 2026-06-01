@@ -2,8 +2,11 @@ import { z } from "zod";
 import {
   insertInterviewSchema,
   interviewSchema,
+  leetcodeProblemSchema,
   messageAnalysisSchema,
   messageSchema,
+  quizQuestionSchema,
+  resumeAnalysisSchema,
 } from "./types";
 
 export const errorSchemas = {
@@ -70,6 +73,45 @@ export const api = {
       responses: {
         200: interviewSchema,
         404: errorSchemas.notFound,
+      },
+    },
+  },
+  resume: {
+    analyze: {
+      method: "POST" as const,
+      path: "/api/resume/analyze",
+      responses: {
+        200: z.object({
+          resumeText: z.string(),
+          analysis: resumeAnalysisSchema,
+        }),
+      },
+    },
+  },
+  practice: {
+    quiz: {
+      method: "POST" as const,
+      path: "/api/practice/quiz",
+      input: z.object({
+        skills: z.union([z.array(z.string()), z.string()]),
+        jobDescription: z.string().optional(),
+        count: z.number().optional(),
+      }),
+      responses: {
+        200: z.object({ questions: z.array(quizQuestionSchema) }),
+      },
+    },
+    leetcode: {
+      method: "POST" as const,
+      path: "/api/practice/leetcode",
+      input: z.object({
+        skills: z.union([z.array(z.string()), z.string()]),
+        jobDescription: z.string().optional(),
+        count: z.number().optional(),
+        difficulty: z.enum(["Easy", "Medium", "Hard", "Mixed"]).optional(),
+      }),
+      responses: {
+        200: z.object({ problems: z.array(leetcodeProblemSchema) }),
       },
     },
   },

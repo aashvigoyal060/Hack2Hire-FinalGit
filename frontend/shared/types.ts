@@ -100,3 +100,40 @@ export type NextStepResponse = {
   message: Message;
   analysis?: Message["analysis"];
 };
+
+export const resumeAnalysisSchema = z.object({
+  atsScore: z.number(),
+  interviewReadinessScore: z.number(),
+  isInterviewReady: z.boolean(),
+  verdict: z.string(),
+  matchedKeywords: z.array(z.string()),
+  missingKeywords: z.array(z.string()),
+  strengths: z.array(z.string()),
+  improvements: z.array(z.string()),
+  extractedSkills: z.array(z.string()),
+  summary: z.string(),
+});
+
+export const quizQuestionSchema = z.object({
+  id: z.number(),
+  topic: z.string(),
+  question: z.string(),
+  options: z.array(z.string()).min(2),
+  correctIndex: z.number(),
+  explanation: z.string(),
+});
+
+export const leetcodeProblemSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  difficulty: z.string(),
+  topics: z.array(z.string()),
+  leetcodeSlug: z.string().optional(),
+  leetcodeUrl: z.string().optional(),
+  description: z.string(),
+  hint: z.string(),
+});
+
+export type ResumeAnalysis = z.infer<typeof resumeAnalysisSchema>;
+export type QuizQuestion = z.infer<typeof quizQuestionSchema>;
+export type LeetcodeProblem = z.infer<typeof leetcodeProblemSchema>;

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Bot, History, Sparkles } from "lucide-react";
+import { Bot, History, Sparkles, GraduationCap } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +35,18 @@ export function AppHeader() {
             )}
           >
             New Session
+          </Link>
+          <Link
+            href="/practice"
+            className={cn(
+              "px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5",
+              location === "/practice"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted",
+            )}
+          >
+            <GraduationCap className="w-4 h-4" />
+            Practice
           </Link>
           <Link
             href="/#history"

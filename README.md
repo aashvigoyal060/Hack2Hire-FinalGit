@@ -11,11 +11,12 @@ Practice technical interviews with an AI interviewer that reads your **resume** 
 
 ## Features
 
-- Voice answers (browser speech-to-text)
-- Timed questions (120s per question)
-- Live scoring and response analysis
+- **Resume PDF upload** — ATS score, keyword match/miss, interview readiness verdict
+- **Tech quiz** — Random MCQ questions from your skillset
+- **LeetCode practice** — Random coding problems by skill & difficulty
+- **Voice questions** — AI questions read aloud (browser text-to-speech) plus voice answers (speech-to-text)
+- Timed questions (120s per question), live scoring, session history, PDF report
 - Interview modes: behavioral, technical, system design, mixed
-- Session history and PDF report export
 - Dark / light theme
 
 ## Tech stack

@@ -9,12 +9,14 @@ import ApiConfigBanner from "@/components/api-config-banner";
 import LandingPage from "@/pages/LandingPage";
 import InterviewPage from "@/pages/InterviewPage";
 import ReportPage from "@/pages/ReportPage";
+import PracticePage from "@/pages/PracticePage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/practice" component={PracticePage} />
       <Route path="/interview/:id" component={InterviewPage} />
       <Route path="/report/:id" component={ReportPage} />
       <Route component={NotFound} />

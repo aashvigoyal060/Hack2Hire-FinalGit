@@ -3,7 +3,7 @@ import { useRoute, useLocation } from "wouter";
 import { useInterview, useNextStep, useCompleteInterview } from "@/hooks/use-interviews";
 import {
   Bot, Send, StopCircle, FileText, Briefcase, Loader2, User, Clock,
-  AlertCircle, Mic, MicOff,
+  AlertCircle, Mic, MicOff, Volume2, VolumeX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import ChatBubble from "@/components/chat-bubble";
 import LiveScorePanel from "@/components/live-score-panel";
 import { useSpeechRecognition } from "@/hooks/use-speech-recognition";
+import { useSpeechSynthesis } from "@/hooks/use-speech-synthesis";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +46,27 @@ export default function InterviewPage() {
     setInput((prev) => (prev ? `${prev} ${text}` : text));
   }, []);
   const { isListening, isSupported, toggle, stop } = useSpeechRecognition(appendTranscript);
+  const { speak, stop: stopSpeaking, enabled: voiceOn, toggle: toggleVoice, supported: voiceSupported } =
+    useSpeechSynthesis();
+  const lastSpokenMessageId = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!data?.messages.length || !voiceOn) return;
+    const lastAssistant = [...data.messages].reverse().find((m) => m.role === "assistant");
+    if (
+      lastAssistant &&
+      lastAssistant.content &&
+      lastAssistant.id !== lastSpokenMessageId.current &&
+      !nextStep.isPending
+    ) {
+      lastSpokenMessageId.current = lastAssistant.id;
+      speak(lastAssistant.content);
+    }
+  }, [data?.messages, voiceOn, nextStep.isPending, speak]);
+
+  useEffect(() => {
+    return () => stopSpeaking();
+  }, [stopSpeaking]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -176,10 +198,17 @@ export default function InterviewPage() {
       {/* Sidebar */}
       <div className="hidden lg:flex w-80 flex-col border-r border-border/60 bg-card/30 backdrop-blur-sm">
         <div className="p-6 border-b border-border/60">
-          <h2 className="text-lg font-display font-bold flex items-center gap-2">
-            <Bot className="w-5 h-5 text-primary" />
-            AI Interviewer
-          </h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-lg font-display font-bold flex items-center gap-2">
+              <Bot className="w-5 h-5 text-primary" />
+              AI Interviewer
+            </h2>
+            {voiceSupported && (
+              <Button variant="ghost" size="icon" className="shrink-0" onClick={toggleVoice} title={voiceOn ? "Mute voice questions" : "Enable voice questions"}>
+                {voiceOn ? <Volume2 className="w-4 h-4 text-primary" /> : <VolumeX className="w-4 h-4" />}
+              </Button>
+            )}
+          </div>
           <div className="flex items-center gap-2 mt-2">
             <Badge variant="secondary" className="capitalize text-xs">{typeLabel}</Badge>
             <span className="text-xs text-muted-foreground">#{interview.id}</span>
@@ -251,6 +280,11 @@ export default function InterviewPage() {
           <div className="flex items-center gap-2 font-display font-bold">
             <Bot className="w-5 h-5 text-primary" /> Interview
           </div>
+          {voiceSupported && (
+            <Button variant="ghost" size="icon" onClick={toggleVoice} title={voiceOn ? "Mute questions" : "Speak questions"}>
+              {voiceOn ? <Volume2 className="w-5 h-5 text-primary" /> : <VolumeX className="w-5 h-5" />}
+            </Button>
+          )}
           {!isCompleted && interview.status === "in_progress" && (
             <div className={cn("text-sm font-mono font-medium", timeLeft <= 30 && "text-destructive animate-pulse")}>
               {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, "0")}
@@ -279,8 +313,8 @@ export default function InterviewPage() {
             {nextStep.isPending && (
               <ChatBubble
                 message={{
-                  id: -1, role: "assistant", content: "", type: "answer",
-                  interviewId: id, createdAt: new Date(), analysis: null,
+                  id: -1, role: "assistant", content: "", type: "question",
+                  interviewId: id, createdAt: new Date(), analysis: null, timeTaken: null,
                 }}
                 isTyping
               />
