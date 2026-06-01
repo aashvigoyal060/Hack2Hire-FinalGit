@@ -8,7 +8,7 @@ Practice technical interviews with an AI interviewer that reads your **resume** 
 |-----|-----|
 | **Frontend (Vercel)** | [https://hack2-hire-woad.vercel.app/](https://hack2-hire-woad.vercel.app/) |
 | **Backend API (Railway)** | [https://hack2hire-backend-production.up.railway.app/health](https://hack2hire-backend-production.up.railway.app/health) |
-| **Tutorial Video Link** | [[https://drive.google.com/drive/folders/1ZfrBHTq2xXrCEggpoZbETvUlYps0t9Fl?usp=sharing](https://drive.google.com/file/d/1H-Z06PdpbxadLIhRtU5MigXBIQyXl-Wx/view?usp=sharing)] |
+| **Tutorial Video Link** | https://drive.google.com/file/d/1YAzIByT--QP6tCocyt-ak2XPe3kDDhNg/view?usp=sharing |
 
 ## Features
 
